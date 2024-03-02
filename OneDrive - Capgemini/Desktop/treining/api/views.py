@@ -1,14 +1,13 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from .serializers import LivroSerializers
 from .models import Livro
-from rest_framework import viewsets
-
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import IsAuthenticated
-
 
 class LivrosViewset(viewsets.ModelViewSet):
+    queryset = Livro.objects.all()  # Defina o queryset
     permission_classes = [IsAuthenticated]
-    queryset = Livro.objects.all()
     serializer_class = LivroSerializers
-# Create your views here.
+
+    def get_queryset(self):
+        # Filtra os livros com base no usuário autenticado
+        return Livro.objects.filter(usuario=self.request.user)
