@@ -1,18 +1,19 @@
-from django.contrib import admin
-from django.urls import path, include
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from django.urls import include, path
 from rest_framework import routers
-from api.views import LivrosViewset
+from api.views import UserViewSet, GroupViewSet, ItemViewSet, ListaViewSet
+from django.contrib import admin
+from rest_framework.authtoken import views
 
 router = routers.DefaultRouter()
-router.register(r'livros', LivrosViewset)  # Remova o parâmetro basename
+router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'items', ItemViewSet)
+router.register(r'lista', ListaViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
+    path('admin/', admin.site.urls)
+    
+
 ]

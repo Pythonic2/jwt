@@ -1,11 +1,27 @@
+from django.contrib.auth.models import User, Group
+from api.models import Lista, Item
 from rest_framework import serializers
-from .models import Livro
 
 
-
-class LivroSerializers(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='livro-detail', lookup_field='pk')
-    
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Livro
-        fields = ['url', 'nome', 'autor', 'usuario']  # Adicione 'url' para o campo de relacionamento
+        model = User
+        fields = ['url', 'username', 'email', 'groups']
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
+
+class GroupItem(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['id','url', 'nome','finalizado']
+
+class GroupLista(serializers.HyperlinkedModelSerializer):
+    item_set = GroupItem(many=True)
+
+    class Meta:
+        model = Lista
+        fields = ['id','url','nome','item_set']

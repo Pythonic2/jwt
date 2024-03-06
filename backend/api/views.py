@@ -1,13 +1,33 @@
+from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from .serializers import LivroSerializers
-from .models import Livro
+from rest_framework import permissions, authentication
+from api.serializers import UserSerializer, GroupSerializer, GroupLista, GroupItem
+from api.models import Lista, Item
 
-class LivrosViewset(viewsets.ModelViewSet):
-    queryset = Livro.objects.all()  # Defina o queryset
-    permission_classes = [IsAuthenticated]
-    serializer_class = LivroSerializers
 
-    def get_queryset(self):
-        # Filtra os livros com base no usuário autenticado
-        return Livro.objects.filter(usuario=self.request.user)
+class UserViewSet(viewsets.ModelViewSet):
+   
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+   
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+
+class ListaViewSet(viewsets.ModelViewSet):
+    queryset = Lista.objects.all()
+    serializer_class = GroupLista
+    # permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = GroupItem
+    # permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
